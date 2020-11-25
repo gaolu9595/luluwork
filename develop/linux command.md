@@ -93,7 +93,7 @@ zstdcat [XXX.tar.gz] | head -n 10 查看XXX压缩文件中的前10行内容
 
 [显示或设置网络设备]
 
-ifconfig en0：查看本机IP地址
+ifconfig eth0：查看本机IP地址
 
 ## ssh
 
@@ -111,4 +111,42 @@ $ ssh-copy-id -I ~/.ssh/id_rsa.pub user@serverIP
 2. grep --color -E "[pattern1].*[pattern2]" [filepath]：查看file中符合pattern1和pattern2的行
 3. grep --color "[pattern1]\\|[pattern2]" [filepath]：查看file中符合pattern1或pattern2的行
 4. grep --color "[pattern1]" [filepath] | grep -v "[pattern2]"：查看file中符合pattern1且不符合pattern2的行
+5. grep --color -C 5 "[pattern]" [filepath]：查看file中包含指定pattern的行的前后5行内容
+   1. grep --color -B 5
+   2. grep --color -A 5
+6. grep -c ....... 计算符合样式的条数
 
+## cut
+
+剪切并摘取
+
+例：echo "${filename}" | cut -d "." -f 3 只输出filename中以.分隔开的第3个字符串
+
+## echo
+
+输出命令
+
+echo -n 不换行输出
+
+echo -e 转义后输出
+
+
+
+## sed
+
+依照脚本的指令来自动处理和编辑文本文件
+
+## find
+
+查找
+
+find [dirname] -name [pattern] 列出路径下匹配的所有文件（-iname 忽略大小写）
+
+find [dilename] -type d -name [pattern] 列出路径下所有匹配的文件夹
+
+## Others
+
+1. du -sh [filepath/dirpath]：展示文件大小
+2. ll [filepath] | wc -l：展示符合filepath的文件个数 (eg: ll *server* | wc -l)
+3. lsof -i:[端口号]：查看某一端口的占用情况
+4. 

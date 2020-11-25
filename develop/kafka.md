@@ -1,0 +1,9 @@
+1. topic是逻辑概念，topic下的partitions才是实际的物理概念
+2. partitions之间的消息是无序的，partition内部的消息是有序的
+3. 同一consumer group中的consumers不能消费同一个partition的信息，因此consumer数目要小于partition数目
+4. producer负责将消息分配给topic的某个partition，consumer负责按规则从partition中获取指定topic的消息
+5. consumer group可以保证某条消息只会被其中某一个consumer所消费
+6. 每个partitiin中包含若干个LogSegment，是一个逻辑概念，实际对应着一个具体的.log日志文件和.index索引文件
+7. offset是partition内的全局偏移量，用于在partition内唯一标识消息
+8. mesaage是kafka中存储的最小单位，即为一个commit log，由一个固定长度的消息头和一个可变长度的消息体组成
+9. 

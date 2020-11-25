@@ -25,7 +25,6 @@
 * iLearn:
 	* lugao@apac.freewheel.com
 	* angel@19950822
-
 * Grafana:
 	*  lugao@apac.freewheel.com
 	* angel19950822
@@ -38,7 +37,13 @@
 * JetBrain Account (Idea IntelliJ / Goland):
 	* lugao@freewheel.tv
 	* succ0822ess1020
-
 * 志愿北京
 	* lugao22
 	* Angel19950822
+* local mysql:
+  * mysql_secure_installation: root/LLkk@9595
+  * lulu/password
+  * 本地的mysql，为了不妨碍docker的mysql，直接停掉啦
+* 中意人寿：
+  * lugao@apac.freewheel.com
+  * clim5088

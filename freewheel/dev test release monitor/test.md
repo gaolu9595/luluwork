@@ -1,9 +1,9 @@
 [TOC]
 
-## Log使用
+## Log查看
 
 ```
-1. 检查是否有stats写入Kafka的各个topic中
+1. 检查mapstats是否有将stats写入Kafka的各个topic中
 grep --color "CacheStat" 2020-10-20-22:35.log
 2. 检查valorizer的这种consumer是否从Kafka中消费了数据，并且flushing到kafka中
 grep --color "Flushing a buffer" server.log

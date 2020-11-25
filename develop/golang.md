@@ -1,7 +1,13 @@
 # Golang
+[TOC]
+
+
+
 ## 实际应用
+
 1. [Golang连接mysql数据库 - 简书](https://www.jianshu.com/p/ee87e989f149)
 2. [使用Kafka(附Golang代码)](https://juejin.im/post/6844903903113248776) [golang 消费 kafka 的坑 | Wolfogre’s Blog](https://blog.wolfogre.com/posts/golang-consume-kafka/)
+3. http://cngolib.com/index.html （go标准库中文文档）
 ## 基础语法
 1. 句尾没有;
 2. package为main的main()函数才能执行
@@ -28,7 +34,7 @@
 	var ptr *int
 	var a int = 2
 	ptr = &a	     (若不对ptr赋值，则ptr为nil)
-	fmt.Println(*ptr) （*指针获取a变量的值，为2）
+	fmt.Println(\*ptr) （*指针获取a变量的值，为2）
 	6. 未初始化的变量值：
 		1. 数值类型（包括complex64/128）为 **0**
 		2. 布尔类型为 **false**
@@ -43,27 +49,53 @@
 		3. append追加元素
 ![C9A11B06-FE3A-4F79-AC91-DB0C6544B561](/var/folders/qr/zhjlrk5j1cg4d4qz5s7dkk9rz3y26g/T/net.shinyfrog.bear/BearTemp.eLKEDx/C9A11B06-FE3A-4F79-AC91-DB0C6544B561.png)
 6. range范围的使用
-![2B4E155F-5BE8-48D7-9332-C9C3FA315FE4](/var/folders/qr/zhjlrk5j1cg4d4qz5s7dkk9rz3y26g/T/net.shinyfrog.bear/BearTemp.B1Jj6j/2B4E155F-5BE8-48D7-9332-C9C3FA315FE4.png)
+<img src="/var/folders/qr/zhjlrk5j1cg4d4qz5s7dkk9rz3y26g/T/net.shinyfrog.bear/BearTemp.k4QzGh/2B4E155F-5BE8-48D7-9332-C9C3FA315FE4.png" alt="2B4E155F-5BE8-48D7-9332-C9C3FA315FE4" style="zoom:33%;" />
 7. 面向对象编程（类、接口）
-	1. type parentclass struct{
-		变量声明……
-	}
-	// 继承该类的子类
-	type childclass stuct{
-		parentclass
-		变量声明……
-	}
-	// 该struct的相关方法定义
-	func (c classname) funcname() {
+  1. type parentclass struct{
+  	变量声明……
+  }
+  // 继承该类的子类
+  type childclass stuct{
+  	parentclass
+  	变量声明……
+  }
+  // 该struct的相关方法定义
+  func (c classname) funcname() {
       		XXXXXXXXXX
-	}
-	2. type interfacename interface{
-		方法声明……
-	}
-	实现一个接口，需要实现其中的所有方法
-	4.  [与Go同行：Golang面向对象编程](https://code.tutsplus.com/zh-hans/tutorials/lets-go-object-oriented-programming-in-golang--cms-26540)
+  }
+  2. type interfacename interface{
+  	方法声明……
+  }
+  实现一个接口，需要实现其中的所有方法
+  4.  [与Go同行：Golang面向对象编程](https://code.tutsplus.com/zh-hans/tutorials/lets-go-object-oriented-programming-in-golang--cms-26540)
 8. 错误处理，通过实现内置的Error接口来处理，使用errors.New 可返回一个错误信息
-type error interface {
-    Error() string
-}
+  type error interface {
+   Error() string
+  }
 9. 并发编程：用go来开启一个goroutine线程，同一个程序中的所有goroutine共享一个地址空间[Go 并发 | 菜鸟教程](https://www.runoob.com/go/go-concurrent.html)
+
+## Golang 项目开发
+
+1. ![GO目录结构](https://static.bookstack.cn/projects/topgoer/801543302bbdbb6ba9efd76ff978fc65.png)
+2. GOROOT：Golang的安装路径
+3. GOPATH：GO大项目的路径（将从该path下的src中寻找source code），go get的依赖包存放的地方
+
+## Go 包管理
+
+1. GoPath：简单粗暴
+2. GoVendor：在项目目录下，添加自己的vendor目录，从GOPATH中拷贝项目引用的依赖包到vendor目录下来进行管理
+3. GoMod：golang1.12后支持，不依赖GoPATH和vendor目录，方便进行版本管理
+4. Go get在GOPATH下不支持version管理，因此一定要注意！大坑（go: cannot use path@version syntax in GOPATH mode）
+5. 
+
+## Go常用package库
+
+1. fmt：标准输入输出库
+2. ioutil：io相关库
+3. log：日志库
+4. os：与平台无关的操作系统库（例：os.Stdin和os.Stdout）
+5. strings
+6. strconv
+7. sql
+8. 
+

@@ -2,7 +2,7 @@
 
 1. **跳板机地址**
 
-```
+```python
 user：lugao ---免key直接登陆
 password：llkk@9595
 
@@ -13,7 +13,7 @@ stg-dev-jumpbox     stgdev03.stg.fwmrm.net
 
 2. **STG环境**
 
-```
+```python
 user: root
 跳板机：stgdev03.stg.fwmrm.net
 
@@ -48,7 +48,7 @@ mongo：mongo 10.235.2.40:27021/stats -u datateamrw -ptae5Ahke
 
 3. **NY5 PROD环境**
 
-```
+```python
 跳板机1: nycjump01.fwmrm.net
 跳板机2: nycjump02.fwmrm.net
 user：backup
@@ -73,11 +73,14 @@ prod的mapstats上的Scribe Log备份存放在这个目录下：
 
 production环境的Mongo，主要包含stats和unique两个数据库
 tech@backup3.stickyadstv.com [不需跳板机，直接ssh登]
+
+production环境的mysql，可通过LQS查询
+production环境的#Scribe Log，可通过LQS查看
 ```
 
 4. **BJO-DEV环境**
 
-```
+```python
 user:lugao
 password：mac开机密码
 需要sudo su进入root用户
