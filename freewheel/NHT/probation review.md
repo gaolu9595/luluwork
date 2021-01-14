@@ -1,0 +1,73 @@
+## Personal Profile
+
+
+
+## Performance self-assessment
+
+然后介绍一下我在入职这几个月以来做的一部分工作，以及在做这些工作时一些收获和提升。
+
+整理了一下，主要包含这几部分：
+
+一个是日常的一些feature和bugfix（）
+
+一个是对SSP业务知识的研究和总结工作
+
+一个比较独立完整的service的设计和开发
+
+最后对Tech Tool的enhancement（）
+
+### Feature & Bugfix
+
+**首先介绍一下做过的几个日常的ticket**，这部分主要是从一些小的feature做起慢慢熟悉了代码框架结构以及开发测试环境等等。
+
+第一个是为GDPR V2提供支持。原来SE提供的gdpr相关的stats都是不区分version的，比如consent、gdpr-valid这些信息；而现在普遍都需要支持gdpr v2，所以需要我们把gdpr的相关字段按照v1和v2区分统计，分别写入到mongo里。这是我做的第一个feature，虽然只是新增了一些字段，但是从SE从DE的Scribe Log中拿到数据，再到对数据做mapper处理，再到写入mongo collection供UI生成metric，整个workflow的每个环节都有涉及到，让我把SE的基本逻辑串起来了；
+
+第二个是最近在做的一个，为VAST4提供支持，UI那边希望在我们处理数据的过程中，对audio和video ad做一下区分，为他们提供campaign的adtype信息。分析了一下，发现DE不会直接把adtype通过event log传给我们，但是zone里面也会新增adtype这个字段，所以我们可以从zone里面拿到这个值填充到campaign中。
+
+第三个是一个bugfix，bug是AdBidderZoneContentOwnerDailyKey这个topic上请求UI的valorizer接口时会发生大量的400，而其他的topic没有这样的问题。先是找了一些Europe的Scribe log放到staging上跑了一下，拿到了一些报错的原始json，json在本地是能正常解码，说明json格式没有问题；后来又发现报错的json里面content-owner都包含一些西文字符，初步觉得可能是编码问题；然后去查代码发现SE这边编码使用的是iso-8859-1编码，即latin编码。UI解码用的是utf-8，两者存在一些不兼容的情况（西文字符）。为了根本上解决这种编码不兼容的问题，SE和UI就约定：对于特殊的unicode字符，UI那边不做强转，默认都按unicode编码返回，SE在接收到result的时候先解码然后再做一次转义就没问题了。
+
+日常的这些ticket开发主要是让我熟悉和理解了整个team是怎么工作的，数据流向是什么样的，咱们SE team处在哪一个环节上。在熟悉了SE代码的基础上，也能够比较好的定位问题解决问题。
+
+### SSP Biz Knowledge Boost
+
+其实在整个SSP team里面，我们SE离业务算是比较远的。就比如说我前面做的那种业务相关的feature，也基本上是为新的业务需求提供数据支持，大致上都是拿到数据做处理然后输出到数据库，业务虽然多种多样，但是对我们SE来说其实就只是数据输入、处理方式和输出位置的区别。但是如果长此以往抱着这样的心态，可能最后造成只会提供数据，但是不知道数据之间的联系，只能出了esc什么的以后再回过头来修修补补。
+
+比如说，在ad-bidder-zone-deal-daily这个mapper上，就有比较多很复杂的东西。优化br和brq的counter，因为我们
+
+所以大夫希望我花时间理解一些重要的业务逻辑，多熟悉数据之间的联系，后面对SE的开发也有帮助。
+
+所以我通过看DE和UI team的一些代码，学习SSP的产品逻辑和业务上花了比较大的effort，主要从这几个方面入手：
+
+一个是DE的Auction过程，因为我们SE处理的Scribe Log除了Impression相关的之外，绝大多数都是从这里的某个步骤产生的，所以熟悉这些非常有必要。这里就简单把这些流程过一遍，在DE收到一个ad setup request的时候第一步是做参数解析，会产生#wo的log，然后就是请求一些第三方服务（比如whiteOps做IVT检测，cassandra做获取user的信息）……
+
+并且就是说在熟悉Auction过程的时候，顺带也能把SFX上的一些metrics和auction的步骤对应起来，能理清里面的简单关系。比如……
+
+然后另一个部分是对external-ad的处理，这是一个三个team各司其职一起完成的比较大的任务。因为理解了整个这一块儿的逻辑，后面做external-ad service的时候也比较轻松了，知道自己每一步都在干嘛，为什么要这样做。
+
+这些相关的knowledge我也整理了比较详细的wiki，也跟组内的小伙伴们做了分享。通过这些业务知识的学习呢，我也感觉到以后做feature的时候，应该多去想想涉及到的数据会和哪些数据存在关联，什么样的关联……这样才能真正的做到用技术来服务业务。
+
+### Project Design & Implement
+
+在前面学习了external-ad的处理以后，我独立地做了一个相对比较完整的project，external-ad service。这个service主要就是做前面DE和SE要做的事情，为新的external-ad创建各种相关联的record。
+
+前面讲到现有的对external-ad的处理，DE、SE和UI三个team都承担一部分工作，UI是通过crontab的方式，而DE和SE是把这部分逻辑直接嵌在主逻辑里的，逻辑比较重，所以把这部分挪出来也能做到一定的解耦合。
+
+并且，因为DE要通过bidder来创建external-ad-id，但是bidder又是在SE这边创建的，并且SE还得等UI那边手动complete seat才能创建bidder，所以导致SE在原来的处理逻辑里面，直接把seat处理和external-ad处理都交织在一起，再加上后续出了bug就修修补补，整块儿代码变得特别晦涩难懂，借这个机会也是把整个逻辑梳理清楚，对代码进行重构，让逻辑更加清晰。
+
+除此之外，ecxternal-ad service也是后面优化mysql服务的第一步。DE和SE都希望能尽可能地把写mysql从主逻辑里分离开来，然后跟ops的同事沟通也觉得能更加优化他们对mysql的部署。对DE来说，不同的DC去写mysql的话，DB之间通过环状复制的方式首先比较慢，而且万一环断裂就会造成很多的p1 p2，如果变成只由一个service单点写的话就……；对SE来说，我们的mapstats因为同时有读写操作，所以mysql不方便扩展，现在还只是几百台mapstats读写一个DB，DB的压力会比较大，如果把写操作都挪出去的话，DB能随着mapstats的扩展更加方便的扩展。
+
+在框架设计上，首先因为原来seat和external-ad的处理混在一起，所以就先梳理了一下逻辑后分成了两大块：
+
+一块儿是由DE通过kafka传过来的message驱动的，
+
+另一块儿是定时检测有没有UI有没有手动complete seat，由这个来驱动。
+
+在这个过程中确实有很大成长，第一次接触golang，从面向对象到面向过程的转变，首先在思维上是一个很大的不习惯。连mysql、连kafka的框架都需要自己去调研去学。一步一步做好设计，想办法解决问题(^-^)
+
+### Tech Tool Enhancement
+
+最后在tech tool的enhance上，优化了Grafana上现有的Redstats Error Monitor。这个monitor是通过linux上collectd这个守护进程来定期的收集redstats运行时的一些error log，但是目前的脚本只是预指定了几种error来收集，比如常见的bulk write是写mongo的错误，tried-to-read-two-times-of-the-same-message是duplicate错误，总的来说这种方式不是很全面，也很不灵活。所以我分析了一下redstats代码里面的error log的大致结构，让脚本按照下面的这种format，自适应地罗列和收集readstats中绝大多数的error log。后面我们redstats的error log也可以通过这种format来写，保证monitor可以自适应的监控到以后加的所有error log，所以对以后能够全面监控问题迅速定位问题还是很有帮助的。做这个ticket也让我学会了写shell，也熟悉了redstats的error log收集过程。
+
+
+
+### 

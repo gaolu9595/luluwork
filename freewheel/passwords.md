@@ -47,3 +47,15 @@
 * 中意人寿：
   * lugao@apac.freewheel.com
   * clim5088
+* lookfantastic
+  * 958899205@qq.com
+  * llkk9595
+* 个人所得税
+  * 13720376422
+  * angel@19950822
+* Looker
+  * lugao@apac.freewheel.com
+  * Angel@19950822
+* webex
+  * lugao@freewheel.tv
+  * lugao : Succ0822Ess1020

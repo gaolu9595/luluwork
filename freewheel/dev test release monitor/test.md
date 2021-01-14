@@ -17,6 +17,7 @@ grep --color "Bulk async result" server.log
 ```
 * 本地docker启动
 * 跑单测cases
+* 例1：单测涉及到loading mysql cache和各种mysql操作的case（如ExternalAdIdProcessorTest）
 ```
 
 ## BJO-DEV测试

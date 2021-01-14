@@ -1,5 +1,7 @@
 ## Docker
 
+<img src="/Users/lugao/Library/Application Support/typora-user-images/image-20201223103631418.png" alt="image-20201223103631418" style="zoom:50%;" />
+
 ### 定义：
 
 Docker是一个开源的***应用容器引擎***，开发者可以打包他们的应用及依赖到一个可移植的容器中，发布到流行的Linux机器上，也可实现虚拟化。
@@ -22,9 +24,11 @@ Docker是一个开源的***应用容器引擎***，开发者可以打包他们�
 5. docker-compose up -d [service名]：为指定的service，build并且run一个container
 6. docker exec -it [service Id] bash：连接进入某个service的容器中
 
+
+
 ### 注意⚠️
 
-1. docker-compose中的port环境变量：“现port：默认port”
+1. docker-compose中的port环境变量：用于暴露端口信息到宿主机，“容器外port：容器内port”
 2. image最好从官方hub中找，并且搞清楚其支持的环境变量
 3. Docker-compose模版教程：https://yeasy.gitbook.io/docker_practice/compose/compose_file
 

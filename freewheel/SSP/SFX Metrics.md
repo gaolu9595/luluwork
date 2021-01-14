@@ -27,7 +27,7 @@
 7. IMP：实际产生的impression总数
 8. Fill Rate（STR）：impression / ad request
 9. STR Tech：impression / bid won
-10. VTR 0-100：广告被观看的时长比例  
+10. VTR 20-100：广告被观看的时长比例  
 	1. VTR = VTR100 / impression
 11. Click：广告点击总数
 	1. CTR = Click / impression

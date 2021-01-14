@@ -57,7 +57,15 @@ mongo -u datateamrw -ptae5Ahke 10.235.2.40:27021/stats
 * ll /usr/share/zookeeper/bin    zookeeper启动与停止脚本
 ```
 
+### Docker
 
+lite-stats工程下的docker容器使用方法：
 
-
+1. 方法1（例如：mysql-container的启动）
+   1. 进入docker/目录，找到所需image的子目录，在该子目录下执行build.sh文件来build a image
+   2. 继续执行该子目录中的run.sh文件来up a container
+   3. 启动该container完成
+2. 方法2（例如：mongo-container的启动）
+   1. 进入docker/non-reg/目录，执行docker-compose up -d 「service名」来build a image并up a container
+   2. 启动该container完成
 

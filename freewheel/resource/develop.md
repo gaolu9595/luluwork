@@ -60,6 +60,8 @@ backup@redstats[1-36]-fw-us-east.stickyadstv.com
 backup@kafka[]-fw-us-east.stickyadstv.com  
 尽量不用 
 
+tech@backup1.stickyadstv.com 可以查看production mysql的DESchema（/var/backups/backupMysql/）
+
 phase1 mapstats机器
 mapstats6-fw-us-east.stickyadstv.com
 mapstats83-fw-us-east.stickyadstv.com
