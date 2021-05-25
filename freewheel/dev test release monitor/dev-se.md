@@ -19,7 +19,7 @@
 * ll /var/lib/stickyadstv/lite-stats/data/main-batch/  DE-log存放路径 [BatchID][需要复制到自己的文件夹下查看具体内容]
 * ll /var/log/mapstats/   mapstats的运行log存放目录
 * /usr/share/mapstats/mapstats $BatchID  启动mapstats进程
-* /etc/init.d/cron stop；/etc/init.d/cron start
+* /etc/init.d/cron stop；/etc/init.d/cron start 暴力启停cron服务
 * crontab -e； crontab -l 手动注释掉“定时启动mapstats进程”
 ```
 
@@ -30,9 +30,12 @@
 * ll /etc/redstats/$KEYNAME     redstats配置文件夹
 * cat /etc/init.d/redstats   启动脚本
 * ll /var/log/redstats/$KEYNAME    redstats的运行log存放目录
-* /etc/init.d/redstats start $KEYNAME   启动相应key的redstats
-* /etc/init.d/redstats stop $KEYNAME    停止相应key的redstats
-* /etc/init.d/redstats status     查看redstats进程情况
+
+每台redstats都跑着不同的进程，是不对等节点
+/root/scripts/redstats restart
+/root/scripts/redstats status
+/root/scripts/redstats AdBidderZoneSourceDurationDailyKey
+
 ```
 
 ### Mongo

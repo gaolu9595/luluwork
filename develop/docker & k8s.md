@@ -23,6 +23,7 @@ Docker是一个开源的***应用容器引擎***，开发者可以打包他们�
 4. docker stop：停止1/more正在运行的containers
 5. docker-compose up -d [service名]：为指定的service，build并且run一个container
 6. docker exec -it [service Id] bash：连接进入某个service的容器中
+7. docker rm：删除1/more已经停止运行的containers
 
 
 

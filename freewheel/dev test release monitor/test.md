@@ -43,3 +43,15 @@ grep --color "Bulk async result" server.log
 grep "!" 【#diff文件名】 | sort
 * 查询对应log内容，查看diff是否合理
 
+
+
+## 回归测试
+
+如果jenkins任务失败遇到类似情况:
+
+```
+Step 1/5 : FROM arti-cache.freewheel.tv/openjdk:8
+manifest for arti-cache.freewheel.tv/openjdk:8 not found
+```
+
+说明artifacotory的cache被清除了, 但是不知道为什么jenkins自己的pull不会触发artifactory主动缓存, 需要自己手动在其他机器上执行`docker pull arti-cache.freewheel.tv/openjdk:8` 然后再执行jenkins

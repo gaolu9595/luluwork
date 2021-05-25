@@ -1,7 +1,8 @@
 # Any passwords in freewheel 👀
 
-* Mac Lock Password（LDAP）: 
+* Mac Lock Password（LDAP）/wiki: 
 	* Succ0822Ess1020
+	* 9595@LLKK.com
 * JumpBox: llkk@9595
 * Microsoft Outlook（Office365）: angel@19950822
 * iPhone ID and passwords:
@@ -18,7 +19,7 @@
 	* unsure, maybe "angel19950822"
 * Github:
 	* lugao
-	* Succ0822Ess1020
+	* 和ldap密码一致
 * datadog：
 	* lugao@apac.freewheel.com
 	* angel@19950822
@@ -26,8 +27,7 @@
 	* lugao@apac.freewheel.com
 	* angel@19950822
 * Grafana:
-	*  lugao@apac.freewheel.com
-	* angel19950822
+	*  LDAP登陆
 * Human Resource
 	* lugao@freewheel.tv
 	* SUBCKU
@@ -59,3 +59,14 @@
 * webex
   * lugao@freewheel.tv
   * lugao : Succ0822Ess1020
+* Facebook:
+  * luuuugao@gmail.com
+  * all4int
+* gmail
+  * luuuugao@gmail.com
+  * angel19950822
+  * <img src="/Users/lugao/Library/Application Support/typora-user-images/image-20210429112546246.png" alt="image-20210429112546246" style="zoom:25%;" />
+* My own github
+  * gaolu9595 (958899205@qq.com)
+  * succ0822ess1020
+* 

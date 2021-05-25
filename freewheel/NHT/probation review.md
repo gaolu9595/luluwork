@@ -67,7 +67,3 @@
 ### Tech Tool Enhancement
 
 最后在tech tool的enhance上，优化了Grafana上现有的Redstats Error Monitor。这个monitor是通过linux上collectd这个守护进程来定期的收集redstats运行时的一些error log，但是目前的脚本只是预指定了几种error来收集，比如常见的bulk write是写mongo的错误，tried-to-read-two-times-of-the-same-message是duplicate错误，总的来说这种方式不是很全面，也很不灵活。所以我分析了一下redstats代码里面的error log的大致结构，让脚本按照下面的这种format，自适应地罗列和收集readstats中绝大多数的error log。后面我们redstats的error log也可以通过这种format来写，保证monitor可以自适应的监控到以后加的所有error log，所以对以后能够全面监控问题迅速定位问题还是很有帮助的。做这个ticket也让我学会了写shell，也熟悉了redstats的error log收集过程。
-
-
-
-### 

@@ -9,8 +9,9 @@
 
 
 
-常用命令
+## 常用命令
 
+```shell
 kafka-topics.sh --describe --zookeeper zookeeper:2181 --topic ExternalAdService
 
 kafka-console-producer.sh --broker-list kafka:9092 --topic ExternalAdService
@@ -24,10 +25,11 @@ kafka-console-consumer.sh --bootstrap-server ac03a8b2bbbf:9092 --topic mytest --
 kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list ac03a8b2bbbf:9092 -topic mytest --time -1
 
 kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list ac03a8b2bbbf:9092 -topic mytest --time -2
+```
 
 
 
-一些框架：
+## 一些框架
 
 **golang-sarama** consumer源码分析https://zhuanlan.zhihu.com/p/110114004
 
@@ -299,10 +301,6 @@ subscriptionConsumer 相当于 FetchRequest 的主循环流程：
 - consumer 与 broker 算是个多对多的关系，如果有多个 partition 位于一个 broker，那么通过单个 brokerConsumer 与之统一交互。
 - 因此 partitionConsumer 与 brokerConsumer 属于一个订阅的关系，partitonConsumer 关注的点是将自己加入订阅并处理订阅的内容，由 brokerConsumer 驱动 FetchRequest 循环；
 - brokerConsumer 使用一个 WaitGroup 来协调多个 partitionConsumer 的执行节奏与结果。
-
-
-
-
 
 
 
