@@ -37,6 +37,12 @@ root@kafka05-preprod.sa.fwmrm.net     10.235.2.56
 mysql:mysql --user stickyadstv_rw --host 10.235.2.44 -p
 [{env:MYSQL_PASSWORD 在root/.credentials里面}]
 
+[staging mysql]
+10.235.2.28(db1) 和 10.235.2.29(db2) 是stg 的mysql
+db2 的数据是新的，目前使用的是db2
+
+
+
 [redstats1上可以登mongo]
 mongo：mongo 10.235.2.40:27021/stats -u datateamrw -ptae5Ahke
 [{env:MONGO_PASSWORD 在root/.credentials里面}]
@@ -117,29 +123,46 @@ cat /etc/clickhouse-server/mysql_dictionary.xml [从mysql中导入dicts]
 4. sudo su - root [用root用户来查询修改clickhouse配置]
 ```
 
-7. **Staging Clickhouse**
+7. **Prod Kafka**
 
+```shell
+backup账户登陆kakfa
+
+backup@kafka1-fw-us-east:~$ /usr/share/kafka/bin/kafka-topics.sh --zookeeper 10.254.5.10:2181 --topic SFXExternalAd --describe
+Topic:SFXExternalAd	PartitionCount:2	ReplicationFactor:2	Configs:retention.ms=604800000
+	Topic: SFXExternalAd	Partition: 0	Leader: 20	Replicas: 20,42	Isr: 20,42
+	Topic: SFXExternalAd	Partition: 1	Leader: 16	Replicas: 16,29	Isr: 16,29
+backup@kafka1-fw-us-east:~$ /usr/share/kafka/bin/kafka-topics.sh --zookeeper 10.254.5.20:2181 --topic SFXExternalAd --describe
+Topic:SFXExternalAd	PartitionCount:2	ReplicationFactor:2	Configs:retention.ms=604800000
+	Topic: SFXExternalAd	Partition: 0	Leader: 20	Replicas: 20,42	Isr: 20,42
+	Topic: SFXExternalAd	Partition: 1	Leader: 16	Replicas: 16,29	Isr: 16,29
 ```
+
+8. **Staging Clickhouse**
+
+```shell
 root@clickhouse1-preprod.stickyadstv.com[PREPROD:10.235.2.57]
 clickhouse-client --user default --password freewheel
 ```
 
-8. **Build机器**
+9. **Build机器**
 
-```
+```shell
 1. 登staging跳板机
 2. ssh root@build-preprod.stickyadstv.com
 ```
 
-9. **SFX Prod**
-   1. zfdang
-   2. 8i68j7at
-   
-10. **STG mysql**，本地tableplus连接（把数据库映射到127.0.0.1:33060）
+10. **SFX Prod**
 
-    ```
-    ssh  -L  33060:10.235.2.29:3306 -N lugao@stgdev03.stg.fwmrm.net -p 22 -f
-    ```
+1. zfdang
+2. 8i68j7at
+3. 用户名：lugao， 密码：lugao@apac.freewheel.com
 
-    
+11. **STG mysql**，本地tableplus连接（把数据库映射到127.0.0.1:33060）
+
+```shell
+ssh  -L  33060:10.235.2.29:3306 -N lugao@stgdev03.stg.fwmrm.net -p 22 -f
+```
+
+12. 
 

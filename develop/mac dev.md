@@ -46,3 +46,61 @@ ivy是一个跟踪管理项目依赖的工具，类似于maven，做jar包管理
 	3. 方法3（例如自行实验启动的amazing_keller container）：只需要run一下就可以同时执行好build和up两步操作，如下图
 
 <img src="/var/folders/qr/zhjlrk5j1cg4d4qz5s7dkk9rz3y26g/T/net.shinyfrog.bear/BearTemp.M6EBd0/Pasted Graphic.png" alt="Pasted Graphic" style="zoom:33%;" />
+
+## MacOs 升级到Big Sur
+
+### Flink运行时找不到/Library/Internet Plugin的问题
+
+手动配置JAVA_HOME也解决不了这个问题，只能暴力删除掉MacOS自带的Java JDK，只留下我们需要用的那一个
+
+```shell
+lugao@lugao-mac ~ /usr/libexec/java_home -V
+Matching Java Virtual Machines (2):
+    1.8.251.08 (x86_64) "Oracle Corporation" - "Java" /Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home
+    1.8.0_251 (x86_64) "Oracle Corporation" - "Java SE 8" /Library/Java/JavaVirtualMachines/jdk1.8.0_251.jdk/Contents/Home
+/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home
+lugao@lugao-mac ~
+lugao@lugao-mac ~
+lugao@lugao-mac ~ which java
+/Library/Java/JavaVirtualMachines/jdk1.8.0_251.jdk/Contents/Home/bin/java
+lugao@lugao-mac ~ cd /Library/Internet Plug-Ins/JavaAppletPlugin.plugin
+cd: string not in pwd: /Library/Internet
+lugao@lugao-mac ~ cd /Library/Internet\ Plug-Ins/JavaAppletPlugin.plugin
+lugao@lugao-mac /Library/Internet Plug-Ins/JavaAppletPlugin.plugin ls
+Contents
+lugao@lugao-mac /Library/Internet Plug-Ins/JavaAppletPlugin.plugin cd ..
+lugao@lugao-mac /Library/Internet Plug-Ins ls
+JavaAppletPlugin.plugin
+lugao@lugao-mac /Library/Internet Plug-Ins cd JavaAppletPlugin.plugin/Contents
+lugao@lugao-mac /Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents ls
+Disabled.plist Enabled.plist  Frameworks     Home           Info.plist     MacOS          Plugins        Resources
+lugao@lugao-mac /Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents cd Home
+lugao@lugao-mac /Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home ls
+COPYRIGHT                          README                             THIRDPARTYLICENSEREADME.txt        bin                                man
+LICENSE                            THIRDPARTYLICENSEREADME-JAVAFX.txt Welcome.html                       lib                                release
+lugao@lugao-mac /Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home cd /Library/Java/JavaVirtualMachines
+lugao@lugao-mac /Library/Java/JavaVirtualMachines ls
+jdk1.8.0_251.jdk
+lugao@lugao-mac /Library/Java/JavaVirtualMachines sudo rm -fr /Library/Internet\ Plug-Ins/JavaAppletPlugin.plugin
+Password:
+lugao@lugao-mac /Library/Java/JavaVirtualMachines ls
+jdk1.8.0_251.jdk
+lugao@lugao-mac /Library/Java/JavaVirtualMachines /usr/libexec/java_home -V
+Matching Java Virtual Machines (1):
+    1.8.0_251 (x86_64) "Oracle Corporation" - "Java SE 8" /Library/Java/JavaVirtualMachines/jdk1.8.0_251.jdk/Contents/Home
+/Library/Java/JavaVirtualMachines/jdk1.8.0_251.jdk/Contents/Home
+lugao@lugao-mac /Library/Java/JavaVirtualMachines flink --version
+Version: 1.11.2, Commit ID: fe36135
+```
+
+
+
+## application pathes in my MacOS
+
+```shell
+lugao@lugao-mac /usr/local/Cellar ls
+apache-flink      go                ipython           maven             mysql             openssl@1.1       python@3.8        sqlite            zeromq
+elasticsearch     go@1.11           jupyterlab        mercurial         node              pandoc            python@3.9        telnet
+gdbm              icu4c             lrzsz             mongodb-community openjdk           protobuf          readline          xz
+```
+

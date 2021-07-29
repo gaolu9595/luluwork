@@ -7,6 +7,10 @@
 7. offset是partition内的全局偏移量，用于在partition内唯一标识消息
 8. mesaage是kafka中存储的最小单位，即为一个commit log，由一个固定长度的消息头和一个可变长度的消息体组成
 
+## Kafka 生产者ACK、Replica、ISR相关详解
+
+https://segmentfault.com/a/1190000023547448
+
 
 
 ## 常用命令
@@ -20,11 +24,14 @@ kafka-consumer-groups.sh --bootstrap-server kafka:9092 --list
 
 kafka-consumer-groups.sh --bootstrap-server kafka:9092 --describe --group test
 
-kafka-console-consumer.sh --bootstrap-server ac03a8b2bbbf:9092 --topic mytest --from-beginning （使用默认的consumer-group进行消费）
+kafka-console-consumer.sh --bootstrap-server kafka:9092 --topic mytest --from-beginning （使用默认的consumer-group进行消费） 
 
 kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list ac03a8b2bbbf:9092 -topic mytest --time -1
 
 kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list ac03a8b2bbbf:9092 -topic mytest --time -2
+
+查看topic内各个partition的最新offset
+kafka-run-class.sh kafka.tools.GetOffsetShell --topic AvatarSeSeat --time -1 --broker-list 10.235.2.52:9092
 ```
 
 

@@ -144,23 +144,24 @@ https://wiki.freewheel.tv/display/Infrastructure/How+to+Use+ELK#HowtoUseELK-Test
 
 4. ```shell
    ssh -i .ssh/fw1-dev-logstash centos@10.23.42.78
+   快捷登录指令： elkdev
    ```
-
    
-
+   
+   
 5. 在centos@ip-10-23-42-78.ec2.internal机器的～/lugao/文件夹下放置自己的conf和template
 
 6. ```shell
+   初次使用时，创建对应的kafka topic
    /home/centos/kafka_2.10-0.10.2.2/bin/kafka-topics.sh --create --zookeeper zookeeper1.dev.aws.fwmrm.net/elkkafka --replication-factor 1 --partitions 4 --config compression.type=gzip retention.ms=7200000 --topic fw-ssp-se-avatar-log
    ```
-
    
-
 7. 在conf文件里，dev环境需要额外配置output到elastic search的user和password
 
 8. 可以fake几条logs，发送到dev kafka相应的topic中，然后观察logstash日志，在kibana上查看结果；或者直接设置logstash的输入为file，查看logstash处理file中内容的情况
 
 ```
+默认生产者，往对应的kafka topic中发送消息
 /home/centos/kafka_2.10-0.10.2.2/bin/kafka-console-producer.sh --broker-list elkkafka.dev.dev.aws.fwmrm.net:9092 --topic fw-ssp-se-avatar-log
 ```
 

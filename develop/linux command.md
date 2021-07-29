@@ -68,6 +68,22 @@ eg: source .bash_profile
 
 <img src="/Users/lugao/Library/Application Support/typora-user-images/image-20201024100356040.png" alt="image-20201024100356040" style="zoom:33%;" />
 
+ps aux | grep [pattern]
+
+```shell
+查看进程信息
+root@daily-report1-fw-us-east.stickyadstv.com[PROD:10.254.10.1]:~$ ps aux | grep grafana
+root     19256  0.0  0.2 2024220 70564 ?       Sl    2020 194:50 ./grafana-server -config ../conf/defaults.ini
+
+查看进程启动可执行文件
+root@daily-report1-fw-us-east.stickyadstv.com[PROD:10.254.10.1]:~$ ll /proc/19256/cwd
+lrwxrwxrwx 1 root root 0 Jun 17 04:24 /proc/19256/cwd -> /root/grafana-6.0.2/bin
+```
+
+
+
+
+
 ## kill
 
 kill -l 列出所有可用信号
@@ -221,4 +237,55 @@ tmpfs            32G     0   32G   0% /sys/fs/cgroup
 tmpfs           6.3G     0  6.3G   0% /run/user/0
 tmpfs           6.3G     0  6.3G   0% /run/user/34
 ```
+
+
+
+## history
+
+```shell
+root@daily-report1-fw-us-east.stickyadstv.com[PROD:10.254.10.1]:~$ history | grep grafana
+  212  2020/10/22-03h22 : ps aux | grep grafana
+  239  2020/11/02-01h05 : scp -i key.pem root@daily-report.stickyadstv.com:/root/grafana-6.0.2 ./grafana-6.0.2 -r
+  240  2020/11/02-01h05 : scp -r -i key.pem root@daily-report.stickyadstv.com:/root/grafana-6.0.2 ./grafana-6.0.2
+  296  2020/11/02-04h21 : cd /root/grafana/conf/
+  358  2020/11/02-02h51 : vi 001-grafana.conf
+  368  2020/11/02-02h53 : ln -s ../sites-available/001-grafana.conf 001-grafana.conf
+  387  2020/11/02-04h49 : cd grafana
+  392  2020/11/02-04h50 : ls|grep grafana
+  393  2020/11/02-04h51 : history|grep grafana
+  394  2020/11/02-04h51 : ./grafana-server -config ../conf/defaults.ini
+  504  2020/11/02-20h59 : vi 001-grafana.conf
+  506  2020/11/02-21h01 : vi 001-grafana.conf
+  518  2020/11/02-21h04 : vi sites-enabled/001-grafana.conf
+  689  2020/11/03-02h21 : cp 001-grafana.conf 003-looker.conf
+ 1447  2020/11/04-00h22 : cat 001-grafana.conf
+ 1458  2020/11/03-22h01 : vi /etc/apache2/sites-enabled/001-grafana.conf
+ 1880  2020/11/04-03h59 : vim 001-grafana.conf
+ 1889  2020/11/04-04h00 : vim 001-grafana.conf
+ 1894  2020/11/04-04h01 : vim 001-grafana.conf
+ 1966  2020/11/03-23h11 : vi 001-grafana.conf
+ 1969  2020/11/03-23h12 : vi 001-grafana.conf
+ 1971  2020/11/03-23h13 : vi 001-grafana.conf
+ 1978  2020/11/03-23h20 : vi 001-grafana.conf
+ 2018  2020/11/03-23h36 : vi 001-grafana.conf
+ 2021  2020/11/03-23h40 : vi 001-grafana.conf
+ 2028  2020/11/04-00h42 : cat 001-grafana.conf
+ 2096  2020/11/04-21h35 : vim 001-grafana.conf
+ 2144  2020/11/05-20h55 : vi /etc/apache2/sites-enabled/001-grafana.conf
+ 4582  2021/01/20-01h30 : ps aux | grep grafana
+```
+
+## Linux 文件目录
+
+/etc 系统配置文件
+
+/home  用户的主目录，在Linux中，每个用户都有一个自己的目录，一般该目录名是以用户的账号命名的 
+
+/root 存放root用户的文件
+
+/lib 存放依赖库
+
+/bin 存放常用命令
+
+/usr 用户的应用程序和文件，类似于windows中的program-files
 

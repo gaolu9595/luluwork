@@ -4,7 +4,7 @@
 
 ## Makefile
 
-make 命令执行，例如：`make build-debian`
+make 命令执行，编译打包，例如：`make build-debian`
 
 ```shell
 SERVICE_NAME=se-avatar-engine
@@ -47,7 +47,7 @@ show all tags: git tag
 create new tag: git tag avatarX.X.X.0
 show code changes: git log --decorate --oneline --graph --color
 push local tag to remote: git push origin avatarX.X.X.0
-show code changes: git log --decorate --oneline --graph --color
+show code changes: git log --decorate --oneline --graphc --color
 
 
 2. build
@@ -61,39 +61,29 @@ mv se-avatar-engine-X.X.X.X.tar.gz /home/releases/
 
 mysql --user stickyadstv_rw --host 10.13.17.14 -P3307 -pstickyadstv_rw
 
-
-
 ## Cut Over
 
 NY5 DB: mysql --user stickyadstv_rw --host 10.13.17.2 -P3306 -pstickyadstv_rw
 
 [用daily-report连]
 
-# HA
+## HA
 
 https://github.freewheel.tv/ssp/sysadmin/pull/605/files
 
 Ops自动化部署
 
+## CI
 
+本地先测一波：
 
+docker pull arti.freewheel.tv/ssp/sfx/golang:1.13 (发现这个image的workdir默认设为了/usr/share/sfx，所以我们后面要改)
 
+docker run -it -v /Users/lugao/work/ssp/go/se_avatar_engine:/usr/share/se-avatar
 
+或者直接用se-avatar-golang来测
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+## DEV
 
 
 

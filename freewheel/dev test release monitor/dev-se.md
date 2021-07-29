@@ -21,6 +21,9 @@
 * /usr/share/mapstats/mapstats $BatchID  启动mapstats进程
 * /etc/init.d/cron stop；/etc/init.d/cron start 暴力启停cron服务
 * crontab -e； crontab -l 手动注释掉“定时启动mapstats进程”
+* jps 查看Java进程号，有时候mapstats进程卡住需要强行kill，然后cron会自动检测再跑一个mapstats进程
+* jmap 排查JDK状态
+* jstack -l 22478 
 ```
 
 ### RedStats
