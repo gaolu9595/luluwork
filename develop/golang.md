@@ -17,16 +17,17 @@
 	2. var age, height, weight int = 25, 162, 51
 	3. nickname := “Lulu” (自动推断类型。⚠️ 左侧的变量不能是已经声明过的，否则会导致编译错误)
 	4. const AREA = “China” (基本数据类型的常量定义时，可以不指定类型，系统可自行判断)
-	特殊常量 iota 
-	第一个 iota 等于 0，每当 iota 在新的一行被使用时，它的值都会自动加 1；所以 a=0, b=1, c=2 可以简写为如下形式：
+		特殊常量 iota 
+		第一个 iota 等于 0，每当 iota 在新的一行被使用时，它的值都会自动加 1；所以 a=0, b=1, c=2 可以简写为如下形式：
 		const (
+   
     			a = iota
-   			b
-    			c	
-		)
+    			b
+	 			c	
+	 	)
 	4. func doSomething (name string, age int) (string, string) {
 		XXXXXXXXXXX
-	}
+		}
 	5. map集合的定义：
 		1. var country map[int]string
 		2. country := map[int]string
@@ -47,11 +48,12 @@
 		1. 不用make时，不赋值则切片为nil
 		2. 用make时，不赋值则切片不为nil、元素值为default值
 		3. append追加元素
-![C9A11B06-FE3A-4F79-AC91-DB0C6544B561](/var/folders/qr/zhjlrk5j1cg4d4qz5s7dkk9rz3y26g/T/net.shinyfrog.bear/BearTemp.eLKEDx/C9A11B06-FE3A-4F79-AC91-DB0C6544B561.png)
+		![C9A11B06-FE3A-4F79-AC91-DB0C6544B561](/var/folders/qr/zhjlrk5j1cg4d4qz5s7dkk9rz3y26g/T/net.shinyfrog.bear/BearTemp.eLKEDx/C9A11B06-FE3A-4F79-AC91-DB0C6544B561.png)
 6. range范围的使用
 <img src="/var/folders/qr/zhjlrk5j1cg4d4qz5s7dkk9rz3y26g/T/net.shinyfrog.bear/BearTemp.k4QzGh/2B4E155F-5BE8-48D7-9332-C9C3FA315FE4.png" alt="2B4E155F-5BE8-48D7-9332-C9C3FA315FE4" style="zoom:33%;" />
 7. 面向对象编程（类、接口）
   1. type parentclass struct{
+
   	变量声明……
   }
   // 继承该类的子类
@@ -64,14 +66,15 @@
       		XXXXXXXXXX
   }
   2. type interfacename interface{
+
   	方法声明……
   }
   实现一个接口，需要实现其中的所有方法
   4.  [与Go同行：Golang面向对象编程](https://code.tutsplus.com/zh-hans/tutorials/lets-go-object-oriented-programming-in-golang--cms-26540)
 8. 错误处理，通过实现内置的Error接口来处理，使用errors.New 可返回一个错误信息
-  type error interface {
+    type error interface {
    Error() string
-  }
+    }
 9. 并发编程：用go来开启一个goroutine线程，同一个程序中的所有goroutine共享一个地址空间[Go 并发 | 菜鸟教程](https://www.runoob.com/go/go-concurrent.html)
 
 ## Golang 项目开发
@@ -100,3 +103,62 @@
 8. golang控制并发的三种方法： https://www.flysnow.org/2017/05/12/go-in-action-go-context.html
 9. 
 
+
+
+
+
+## Golang的多线程
+
+### channel支持线程间通信
+
+channel本质是数据流动，分为阻塞和非阻塞channel两种
+
+阻塞channel的读写不能在同一个线程中，否则会死锁
+
+非阻塞channel的读写可以在同一个线程中，但是如果没有数据pull的话也会阻塞
+
+### channel是线程安全的，并发首选
+
+使用通信来共享内存，而不是使用共享内存来通信
+
+在channel和mutex之间，golang推荐首选channel
+
+channel是线程安全的，可以被多个goroutine同时读写，我们不需要考虑其数据冲突
+
+### 优雅的检查channel的关闭
+
+https://www.cnblogs.com/-wenli/p/12350181.html
+
+使用ok检查channel是否关闭且是否清空了所有数据，然后break或者将channel置为nil（select不会在nil的channel上等待）
+
+### select-case的随机监听以及优先级监听
+
+```go
+func worker2(ch1, ch2 <-chan int, stopCh chan struct{}) {
+	for {
+		select {
+		case <-stopCh:
+			return
+		case job1 := <-ch1:
+			fmt.Println(job1)
+		case job2 := <-ch2:
+		priority:
+			for {
+				select {
+				case job1 := <-ch1:
+					fmt.Println(job1)
+				default:
+					break priority
+				}
+			}
+			fmt.Println(job2)
+		}
+	}
+}
+```
+
+### 优雅的执行和检查goroutine的关闭
+
+1. signals
+2. sync.WaitGroup
+3. context.Cancel

@@ -16,11 +16,11 @@
 2. **Redstats**：
 	* 创建Kafka连接
 	
-	* 每一台redstats都是不对等的，配置着自己的多个topic，即启动多个redstats进程（⚠️redstats配置的topic name是child topic，也就是最终写入mongo的collection名字，与kafka上的mother topic不一定一致）
+	* 每一台redstats都是不对等的，配置着自己的多个topic，即启动多个redstats进程（⚠️redstats名称和配置的topic name是child topic，也就是最终写入mongo的collection名字，与kafka上的mother topic不一定一致）
 	
-	* 在每一个redstats进程上，为自己的redstats-topic创建出特定的consumerGroup，根据redstats.conf来创建consumer（pass-through/lle/mongo等），createRunnableConsumer（每台redstats都是一个consumer group，创建出多个consumer来消费kafka，而ACachedConsumer是Consumer对象的父类）
+	* 在每一个redstats进程上，为自己的redstats-child-topic创建出特定的consumerGroup，根据redstats.conf来创建consumer（pass-through/lle/mongo等），createRunnableConsumer（每个redstats进程都先创建一个consumer group，然后创建出一个对应的consumer来消费kafka，而ACachedConsumer是Consumer对象的父类）
 	
-	* 一个redstats进程有一个ConsumerGroup，包含多个consumer线程去消费同一个kafka topic不同partition的数据；可能有多台redstats的多个ConsumerGroup消费同一kafka topic的数据
+	* 一个redstats进程有一个ConsumerGroup，包含一个consumer线程去消费指定kafka topic指定partition的数据（我们采用的是custom assign的模式）；多个redstats进程的同名ConsumerGroup消费同一kafka topic的数据
 	
 	* 每一个consumer消费的kafka topic（⚠️mother topic）在ChildTopic.Name属性里面已经配置好了，consumer线程会被assign去消费对应kafka topic的指定partition的数据
 	

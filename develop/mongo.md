@@ -80,3 +80,79 @@ db.ea_seat_bpl_zone_deal_device_daily.aggregate([
 db.ad_bidder_zone_daily.find( { $where: function() { return (this._id.d == 20210426 && this.value.upct > this.value.ct )}}).pretty();
 ```
 
+
+
+**在分片的mongo上执行update操作的隐患**
+
+```shell
+A single update on a sharded collection must contain an exact match on _id (and have the collection default collation) or contain the shard key (and have the simple collation). Update request: { q: { XXX: XXX }, u: { XXX: XXX } }, multi: false, upsert: false }, shard key pattern: { XXX: XXX }
+```
+
+https://blog.wolfogre.com/posts/trap-of-update-on-sharding-mongodb/
+
+
+
+**mongo实现map-reduce**
+
+https://www.docs4dev.com/docs/zh/mongodb/v3.6/reference/tutorial-perform-incremental-map-reduce.html
+
+> db.ad_bidder_zone_daily.mapReduce(
+> ... function() {emit(this._id.d, this.value.cr.rvb)},
+> ... function(key,values) {return Array.sum(values)},
+> ... {
+> ... query:{"_id.z":{$exists:1}},
+>
+> ... out:"mapreduce_out"
+>
+> ... }
+> ... ).find()
+
+
+
+```kotlin
+var mapFunction = function() {
+                      var key = this.userid;
+                      var value = {
+                                    userid: this.userid,
+                                    total_time: this.length,
+                                    count: 1,
+                                    avg_time: 0
+                                   };
+
+                      emit( key, value );
+                  };
+var reduceFunction = function(key, values) {
+
+                        var reducedObject = {
+                                              userid: key,
+                                              total_time: 0,
+                                              count:0,
+                                              avg_time:0
+                                            };
+
+                        values.forEach( function(value) {
+                                              reducedObject.total_time += value.total_time;
+                                              reducedObject.count += value.count;
+                                        }
+                                      );
+                        return reducedObject;
+                     };
+存量map-reduce
+db.sessions.mapReduce( mapFunction,
+                       reduceFunction,
+                       {
+                         out: "session_stat",
+                         finalize: finalizeFunction
+                       }
+                     )
+增量map-reduce
+db.sessions.mapReduce( mapFunction,
+                       reduceFunction,
+                       {
+                         query: { ts: { $gt: ISODate('2011-11-05 00:00:00') } },
+                         out: { reduce: "session_stat" },
+                         finalize: finalizeFunction
+                       }
+                     );
+```
+

@@ -1,15 +1,49 @@
+[TOC]
+
+## 基本知识
+
 1. topic是逻辑概念，topic下的partitions才是实际的物理概念
+
 2. partitions之间的消息是无序的，partition内部的消息是有序的
+
 3. 同一consumer group中的consumers不能消费同一个partition的信息，因此consumer数目要小于partition数目
+
 4. producer负责将消息分配给topic的某个partition，consumer负责按规则从partition中获取指定topic的消息
+
 5. consumer group可以保证某条消息只会被其中某一个consumer所消费
+
 6. 每个partitiin中包含若干个LogSegment，是一个逻辑概念，实际对应着一个具体的.log日志文件和.index索引文件
+
 7. offset是partition内的全局偏移量，用于在partition内唯一标识消息
-8. mesaage是kafka中存储的最小单位，即为一个commit log，由一个固定长度的消息头和一个可变长度的消息体组成
 
-## Kafka 生产者ACK、Replica、ISR相关详解
+8. auto-commit和manual-commit的采用 / auto-assign和custom-assign的采用，都需要根据实际情况
 
-https://segmentfault.com/a/1190000023547448
+9. mesaage是kafka中存储的最小单位，即为一个commit log，由一个固定长度的消息头和一个可变长度的消息体组成
+
+10. Header
+
+    Key for hash, value is main content
+
+    segment.byte 超过这个数了才会形成文件，所以有可能流量小的partition中的rentention不生效，很早以前的message可能都还存在
+
+    一个broker就是一个kafka server进程
+
+    ack的配置，控制producer生产消息的一致性
+
+    offset commit的配置，控制consumer消费消息的一致性
+
+    rebalance in consumer group
+
+11. consumer group及sarama探索：
+
+    1. **Consumer Group中的Consumer个数**一般来说并不是代码里强行写死的，它可以随着程序的部署扩展紧缩而增加减少，其能自动管理其Rebalance行为。如果要在一套代码里为某一个consumer group创建多个consumer，需要指定这多个consumer从同名的ConsumerGroup而来
+    2. sarama中，不论是自行实现partition consumer还是使用consumer group，实质都是通过**offset_manager的Commit()**来实现**AutoCommit.Enable=false**时的手动commit的，且该操作为**同步阻塞**操作（Note: calling Commit performs a blocking synchronous operation.）
+    3. sarama中，创建consumerGroup时提交的consumerGroupHandler实例实质会为每个topic+partition的组合创建一个自己的ConsumerClaim()，方便管理每个topic+partition的消费情况
+    4. Consumer Group中Consumers的消费有auto assign和custom assign两种方式，不论是哪种方式**consumers数目是必须小于等于partition数目**的。auto assign模式下，consumer的加减会自动调用group的reblance实现partition的分配；custom assign模式下，consumer在加进来的时候就已经指定好了去消费哪些partition。
+
+12. kafka的partition设计之初就是为了迎合大数据和多线程的，所以通过指定partition数目来约定后端processor数目也是合理的，是比较合理的捆绑，**不需要强行在consumer和processor之间做解耦合**
+
+13. Kafka 生产者ACK、Replica、ISR相关详解： https://segmentfault.com/a/1190000023547448
 
 
 
@@ -36,7 +70,7 @@ kafka-run-class.sh kafka.tools.GetOffsetShell --topic AvatarSeSeat --time -1 --b
 
 
 
-## 一些框架
+## golang-sarama
 
 **golang-sarama** consumer源码分析https://zhuanlan.zhihu.com/p/110114004
 
@@ -81,7 +115,7 @@ brokerConsumer 会负责发起 FetchRequest 的主循环，每轮迭代拉取一
 
 如果用户消费 messages chan 有超时，parseResponse 会返回 errTimeout，brokerConsumer 会依据 errTimeout 而暂停 fetchRequest。
 
-## partitionConsumer
+### partitionConsumer
 
 partitonConsumer 会启动 dispatcher 和 responseFeeder 两个 goroutine，其中 dispatcher goroutine 用于跟踪 broker 的变化，偏元信息性质的控制侧，而 responseFeeder 用于跟踪消息的到来，偏数据侧。
 
@@ -202,7 +236,7 @@ child.feed 这个 channel 也是来自 brokerConsumer。大约是处理来自 br
 3. 将当前批次的消息列表消化掉，如果中途 partitionConsumer 退出，则停止消化当前批次的消息；
 4. child.broker.input child，将 partitionConsumer 重新加入 brokerConsumer 的订阅；
 
-## brokerConsumer
+### brokerConsumer
 
 brokerConsumer 的结构体如下：
 
@@ -303,31 +337,13 @@ subscriptionConsumer 相当于 FetchRequest 的主循环流程：
   }
 ```
 
-## 总结
+### 总结
 
 - consumer 与 broker 算是个多对多的关系，如果有多个 partition 位于一个 broker，那么通过单个 brokerConsumer 与之统一交互。
 - 因此 partitionConsumer 与 brokerConsumer 属于一个订阅的关系，partitonConsumer 关注的点是将自己加入订阅并处理订阅的内容，由 brokerConsumer 驱动 FetchRequest 循环；
 - brokerConsumer 使用一个 WaitGroup 来协调多个 partitionConsumer 的执行节奏与结果。
 
 
-
-
-
-## Kafka 
-
-Header
-
-Key for hash, value is main content
-
-segment.byte 超过这个数了才会形成文件，所以有可能流量小的partition中的rentention不生效，很早以前的message可能都还存在
-
-一个broker就是一个kafka server进程
-
-ack的配置，控制producer生产消息的一致性
-
-offset commit的配置，控制consumer消费消息的一致性
-
-rebalance in consumer group
 
 
 

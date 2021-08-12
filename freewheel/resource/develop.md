@@ -42,7 +42,6 @@ mysql:mysql --user stickyadstv_rw --host 10.235.2.44 -p
 db2 的数据是新的，目前使用的是db2
 
 
-
 [redstats1上可以登mongo]
 mongo：mongo 10.235.2.40:27021/stats -u datateamrw -ptae5Ahke
 [{env:MONGO_PASSWORD 在root/.credentials里面}]
@@ -72,7 +71,7 @@ phase1 mapstats机器
 mapstats6-fw-us-east.stickyadstv.com
 mapstats83-fw-us-east.stickyadstv.com
 mapstats221-fw-us-east.stickyadstv.com
-mapstats284-fw-us-east.stickyadstv.com
+mapstats211-fw-us-east.stickyadstv.com
 【phase1时，只上四台mapstats，上所有的redstats】
 【phase2时，上所有的mapstats】
 
